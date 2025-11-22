@@ -1,0 +1,30 @@
+# compiled output
+/dist
+/node_modules
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# os
+.DS_Store
+Thumbs.db
+
+# tests
+/coverage
+/.nyc_output
+
+# ide
+.idea/
+.vscode/
+*.swp
+*.iml
+
+# application
+*.db
+*.sqlite
+/data
+.env
+
