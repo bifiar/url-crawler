@@ -82,21 +82,21 @@ export class CrawlerService {
         }
 
         const chunk = queue.splice(0, chunkSize);
-        const promises = chunk.map((task: CrawlTask) => {
+        const throttledTasks = chunk.map((task: CrawlTask) => {
           if (visited.has(task.url)) {
-            return Promise.resolve([]);
+            return Promise.resolve<CrawlTask[]>([]);
           }
           visited.add(task.url);
 
-          return this.processTask(batchId, task, depthLimit);
+          return this.globalLimit(() =>
+            this.processTask(batchId, task, depthLimit),
+          );
         });
 
-        // Wait for the chunk to finish (Level-by-Level ish, but batched)
-        // We use globalLimit to ensure we respect the global concurrency limit
-        // if multiple batches run in parallel.
-        const results = await Promise.all(
-          promises.map((p) => this.globalLimit(() => p)),
-        );
+        // Wait for the chunk to finish (Level-by-Level-ish, but batched)
+        // The globalLimit ensures we respect the global concurrency cap even
+        // when multiple batches run simultaneously.
+        const results = await Promise.all(throttledTasks);
 
         for (const nextTasks of results) {
           for (const nextTask of nextTasks) {

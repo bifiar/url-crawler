@@ -207,4 +207,30 @@ describe('CrawlerService', () => {
       BatchStatus.COMPLETED,
     );
   });
+
+  it('should enforce global concurrency limit across batches', async () => {
+    await setupCrawlerService({ CRAWLER_CONCURRENCY: 1 });
+    const tracked = { inFlight: 0, peak: 0 };
+
+    httpFetchService.fetch.mockImplementation(async (url: string) => {
+      tracked.inFlight += 1;
+      tracked.peak = Math.max(tracked.peak, tracked.inFlight);
+      await new Promise((resolve) => setTimeout(resolve, 10));
+      tracked.inFlight -= 1;
+      return {
+        statusCode: 200,
+        headers: {},
+        body: `<html>${url}</html>`,
+        durationMs: 10,
+        finalUrl: url,
+      };
+    });
+
+    await Promise.all([
+      service.startCrawl('batch-a', ['https://one.com', 'https://two.com']),
+      service.startCrawl('batch-b', ['https://three.com']),
+    ]);
+
+    expect(tracked.peak).toBeLessThanOrEqual(1);
+  });
 });
