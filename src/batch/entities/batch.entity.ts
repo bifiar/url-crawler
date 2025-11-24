@@ -30,10 +30,10 @@ export class BatchEntity {
   createdAt: Date;
 
   @Column({ type: 'datetime', nullable: true })
-  completedAt: Date;
+  completedAt: Date | null;
 
   @Column({ type: 'text', nullable: true })
-  error: string;
+  error: string | null;
 
   @Column('simple-json')
   seedUrls: string[];

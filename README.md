@@ -39,6 +39,20 @@ A production-grade URL crawler service built with NestJS. This service allows su
    cp env.example .env
    ```
 
+## Environment Variables
+
+These values control runtime behavior and can be overridden through `.env` or process-level environment variables:
+
+- `NODE_ENV`: Node runtime mode (`development`, `production`, etc.).
+- `PORT`: HTTP port the Nest app listens on (defaults to `8080`).
+- `DATABASE_PATH`: Path to the SQLite database file.
+- `CRAWLER_CONCURRENCY`: Max number of pages fetched in parallel per instance.
+- `CRAWLER_MAX_DEPTH`: Default maximum crawl depth (individual requests can lower it via `maxDepth`).
+- `CRAWLER_MAX_PAGES`: Hard cap on pages processed per batch to avoid runaway crawls.
+- `HTTP_TIMEOUT_MS`: Timeout for outbound HTTP fetches, in milliseconds.
+
+When deploying, copy `env.example` to `.env` and tweak the values for your environment (e.g., larger concurrency on beefier machines).
+
 ## Running the Application
 
 ### Development
