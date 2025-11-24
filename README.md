@@ -272,9 +272,15 @@ The service is designed to run on a VM instance.
 
    ```bash
    npm install -g pm2
-   pm2 start npm --name url-crawler -- start
+   pm2 start npm --name url-crawler -- run start:prod
    pm2 save
    pm2 startup
+   ```
+
+   If you don't need PM2, you can simply run:
+
+   ```bash
+   npm run start:prod
    ```
 
 8. **Access:**
