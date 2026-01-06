@@ -276,3 +276,26 @@ describe('UserService', () => {
 - Use database indexes on frequently queried columns
 - Implement caching for expensive operations
 - Stream large responses instead of loading into memory
+
+## Code Review Standards
+
+When reviewing code (via `/pr-review` or manually), check these criteria:
+
+### Critical (block merge)
+- Floating promises or unhandled rejections
+- Security vulnerabilities (injection, hardcoded secrets)
+- Missing error handling on async operations
+- TypeScript strict mode violations
+
+### Important (request changes)
+- Raw `.then()` instead of async/await
+- Generic errors instead of NestJS exceptions
+- Missing input validation on DTOs
+- No tests for new functionality
+- Improper DI patterns
+
+### Suggestions (optional)
+- Naming convention deviations
+- Missing Logger context
+- Hardcoded config values
+- Code organization improvements
