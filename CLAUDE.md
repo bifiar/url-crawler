@@ -37,6 +37,7 @@ src/
 ## Code Conventions
 
 ### File Naming
+
 - Services: `*.service.ts`
 - Controllers: `*.controller.ts`
 - Modules: `*.module.ts`
@@ -46,18 +47,21 @@ src/
 - E2E tests: `*.e2e-spec.ts` (in `test/` directory)
 
 ### Class Naming
+
 - Services: `FooService`
 - Controllers: `FooController`
 - Entities: `FooEntity`
 - DTOs: `FooDto`
 
 ### Testing Patterns
+
 - Use `Test.createTestingModule()` from `@nestjs/testing`
 - Mock dependencies with `jest.fn()` and `jest.Mocked<T>`
 - Provide mocks via `useValue` in module providers
 - Tests live in `__tests__/` subdirectories next to source files
 
 Example test setup:
+
 ```typescript
 const mockRepository = {
   save: jest.fn(),
@@ -117,6 +121,7 @@ HTTP_TIMEOUT_MS=10000
 ## Node.js & TypeScript Best Practices
 
 ### Async/Await
+
 - Always use `async/await` over raw Promises or callbacks
 - Never ignore Promise rejections - always handle with try/catch or `.catch()`
 - Use `Promise.all()` for concurrent independent operations
@@ -131,10 +136,11 @@ const [users, posts] = await Promise.all([
 ]);
 
 // Good: handle all results even on partial failure
-const results = await Promise.allSettled(urls.map(url => this.fetch(url)));
+const results = await Promise.allSettled(urls.map((url) => this.fetch(url)));
 ```
 
 ### Error Handling
+
 - Use NestJS built-in exceptions (`BadRequestException`, `NotFoundException`, etc.)
 - Let errors bubble up to the global HttpExceptionFilter
 - Log errors with context using NestJS Logger
@@ -151,6 +157,7 @@ this.logger.error(`Failed to process ${id}`, error.stack);
 ```
 
 ### TypeScript
+
 - Enable and respect strict mode (`strictNullChecks`, `noImplicitAny`)
 - Use explicit return types on public methods
 - Prefer `unknown` over `any` when type is truly unknown
@@ -170,6 +177,7 @@ function isError(value: unknown): value is Error {
 ```
 
 ### Dependency Injection
+
 - Inject dependencies via constructor (NestJS standard)
 - Use `private readonly` for injected dependencies
 - Prefer interface-based injection for testability
@@ -187,6 +195,7 @@ export class MyService {
 ```
 
 ### Resource Management
+
 - Implement `OnModuleDestroy` for cleanup (close connections, clear intervals)
 - Use `AbortController` for cancellable operations
 - Set timeouts on HTTP requests and database queries
@@ -204,12 +213,14 @@ export class MyService implements OnModuleDestroy {
 ```
 
 ### Configuration
+
 - Use `ConfigService` for all environment variables
 - Provide sensible defaults: `configService.get('PORT', 3000)`
 - Validate required config at startup
 - Never hardcode secrets or environment-specific values
 
 ### Logging
+
 - Use NestJS `Logger` with named context
 - Log at appropriate levels: `log`, `warn`, `error`, `debug`
 - Include relevant identifiers (IDs, URLs) in log messages
@@ -223,6 +234,7 @@ this.logger.error(`Failed to fetch ${url}`, error.stack);
 ```
 
 ### Input Validation
+
 - Use class-validator decorators on DTOs
 - Validate at controller level (ValidationPipe handles this)
 - Sanitize user input before database operations
@@ -241,6 +253,7 @@ export class CreateUserDto {
 ```
 
 ### Testing
+
 - Test behavior, not implementation details
 - Mock external dependencies (HTTP, database)
 - Use descriptive test names that explain the scenario
@@ -271,6 +284,7 @@ describe('UserService', () => {
 ```
 
 ### Performance
+
 - Use pagination for list endpoints (`limit`, `offset`)
 - Select only needed columns in queries when possible
 - Use database indexes on frequently queried columns
@@ -282,12 +296,14 @@ describe('UserService', () => {
 When reviewing code (via `/pr-review` or manually), check these criteria:
 
 ### Critical (block merge)
+
 - Floating promises or unhandled rejections
 - Security vulnerabilities (injection, hardcoded secrets)
 - Missing error handling on async operations
 - TypeScript strict mode violations
 
 ### Important (request changes)
+
 - Raw `.then()` instead of async/await
 - Generic errors instead of NestJS exceptions
 - Missing input validation on DTOs
@@ -295,6 +311,7 @@ When reviewing code (via `/pr-review` or manually), check these criteria:
 - Improper DI patterns
 
 ### Suggestions (optional)
+
 - Naming convention deviations
 - Missing Logger context
 - Hardcoded config values
